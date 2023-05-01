@@ -5,37 +5,64 @@ using UnityEngine.UI;
 
 public class OrderUI : MonoBehaviour
 {
-    [Header ("텍스트")]
+    [Header("패널")]
+    [SerializeField] Image OrderPanel;
+    [Header("텍스트")]
     [SerializeField] Text OrderText;
-    [Header ("버튼")]
+    [SerializeField] Text GuestName;
+    [SerializeField] Text ScoreText;
+
+    [Header("버튼")]
     [SerializeField] Button NextButton;
+
     [SerializeField] Button EndButton;
-    [Header ("그 외")]
+    [SerializeField] Button ClearButton;
+    [SerializeField] Button FailButton;
+    [Header("그 외")]
     public int Index = 0;
     void Start()
     {
         OrderManager.RandomOrder();
+        GuestName.text = OrderManager.instance.SelectOrder.guestName;
         OrderText.text = OrderManager.instance.SelectOrder.order[Index];
-        NextButton.onClick.AddListener(()=> {
+        NextButton.onClick.AddListener(() =>
+        {
             Index++;
             SetOrder();
         });
-        EndButton.onClick.AddListener(() => {
-                //여기엔 이제 음식을 만드는 화면으로 이동하는 코드 넣어주면 됨.            
+        EndButton.onClick.AddListener(() =>
+        {
+            OrderPanel.gameObject.SetActive(true);
+            OrderManager.RandomOrder();
+        });
+        ClearButton.onClick.AddListener(() =>
+        {
+            OrderManager.instance.Score += 100;
+            OrderPanel.gameObject.SetActive(false);
+        });
+        FailButton.onClick.AddListener(() =>
+        {
+            OrderPanel.gameObject.SetActive(false);
         });
     }
 
     void Update()
     {
-        
-    }
-    public void SetOrder(){
-        if(Index > OrderManager.instance.SelectOrder.order.Count){
-            //여기엔 이제 음식을 만드는 화면으로 이동하는 코드 넣어주면 됨.  
-        }
-        else{
-             OrderText.text = OrderManager.instance.SelectOrder.order[Index];
-        }
 
+    }
+    public void SetOrder()
+    {
+        if (Index >= OrderManager.instance.SelectOrder.order.Count)
+        {
+            OrderPanel.gameObject.SetActive(true);
+            OrderManager.RandomOrder();
+            Index = 0;
+            GuestName.text = OrderManager.instance.SelectOrder.guestName;
+            OrderText.text = OrderManager.instance.SelectOrder.order[Index];
+        }
+        else
+        {
+            OrderText.text = OrderManager.instance.SelectOrder.order[Index];
+        }
     }
 }

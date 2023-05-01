@@ -6,6 +6,7 @@ using UnityEngine;
 public class Order
 {
     public List<string> order = new List<string>();
+    public string guestName;
 }
 
 public class OrderManager : MonoBehaviour
@@ -14,6 +15,8 @@ public class OrderManager : MonoBehaviour
     public List<Order> OrderList = new List<Order>();
     public Order SelectOrder; // 선택된 주문임.
 
+
+    public int Score;
     private void Awake() {
         instance = this;
     }
